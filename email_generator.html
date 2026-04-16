@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>מחולל מייל</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px 24px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      gap: 24px;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    #subject { height: 60px; }
+    #output { height: 300px; }
+
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #1f6feb;
+      color: white;
+      cursor: pointer;
+    }
+
+    .recipients {
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .recipients div {
+      background: #f0f0f0;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    .small-button {
+      margin-top: 6px;
+      padding: 8px;
+    }
+
+      .section {
+      margin-top: 80px;
+    }
+
+button:active {
+  background: #1e40af; /* darker blue */
+  transform: scale(0.97);
+}
+
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <h2>מחולל מייל - פניית אזרח</h2>
+
+  <div class="container">
+
+    <!-- LEFT -->
+    <div class="column">
+
+      <div class="section">
+      </div>
+
+      <label>שם</label>
+      <input id="name">
+
+      <label>תעודת זהות</label>
+      <input id="id">
+
+      <label>מס' רכב</label>
+      <input id="vehicle">
+
+      <label>טלפון</label>
+      <input id="phone">
+
+      <label>אימייל</label>
+      <input id="email">
+
+      <label>תאריך האירוע</label>
+      <input id="eventDate">
+
+      <label>תאריך הפנייה</label>
+      <input id="requestDate">
+
+      <button onclick="generateEmail()">צור מייל</button>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="column">
+
+
+       <div class="recipients">
+        <label>נמענים</label>
+        <div id="toEmails">פניות הציבור, בקרה, יוני קרבונרה, אווה יהודאי</div>
+
+        <button class="small-button" onclick="copyRecipients()">העתק נמענים</button>
+      </div>
+
+      <label>נושא</label>
+      <textarea id="subject"></textarea>
+      <button class="small-button" onclick="copySubject()">העתק נושא</button>
+
+      <label>גוף המייל</label>
+      <textarea id="output"></textarea>
+      <button class="small-button" onclick="copyBody()">העתק גוף</button>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+function generateEmail() {
+  const name = document.getElementById("name").value;
+  const id = document.getElementById("id").value;
+  const vehicle = document.getElementById("vehicle").value;
+  const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value;
+  const eventDate = document.getElementById("eventDate").value;
+  const requestDate = document.getElementById("requestDate").value;
+
+  const subjectText = `פניית אזרח - ${name || "ללא שם"} - ת.ז ${id || ""}`;
+
+  const bodyText = `שלום רב,
+
+התקבלה שיחה לחדר הבקרה מאזרח שטוען שלא קיבל מענה לפנייתו.
+
+שם: ${name}
+ת.ז: ${id}
+מס' רכב: ${vehicle}
+מס' טלפון: ${phone}
+אימייל: ${email}
+תאריך האירוע: ${eventDate}
+תאריך הפנייה: ${requestDate}
+
+אשמח לטיפולכם`;
+
+  document.getElementById("subject").value = subjectText;
+  document.getElementById("output").value = bodyText;
+}
+
+function copySubject() {
+  copyText(document.getElementById("subject").value, "הנושא הועתק");
+}
+
+function copyBody() {
+  copyText(document.getElementById("output").value, "הגוף הועתק");
+}
+
+function copyRecipients() {
+  const to = "peniyot@ayalonhw.co.il; Bakara@ayalonhw.co.il; evay@ayalonhw.co.il; yonica@ayalonhw.co.il";
+  copyText(to, "הנמענים הועתקו");
+}
+
+function copyText(text, msg) {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      
+      .catch(() => fallbackCopy(text, msg));
+  } else {
+    fallbackCopy(text, msg);
+  }
+}
+
+function fallbackCopy(text, msg) {
+  const temp = document.createElement("textarea");
+  temp.value = text;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  alert(msg);
+}
+</script>
+
+</body>
+</html>
