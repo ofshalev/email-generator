@@ -172,8 +172,8 @@ function generateEmail() {
   const vehicle = document.getElementById("vehicle").value;
   const phone = document.getElementById("phone").value;
   const email = document.getElementById("email").value;
-  const eventDate = document.getElementById("eventDate").value;
-  const requestDate = document.getElementById("requestDate").value;
+  const eventDate = formatDate(document.getElementById('eventDate').value);
+  const requestDate = formatDate(document.getElementById('requestDate').value);
 
   const subjectText = `פניית אזרח - ${name || "ללא שם"} - ת.ז ${id || ""}`;
 
@@ -226,6 +226,12 @@ function fallbackCopy(text, msg) {
   document.execCommand("copy");
   document.body.removeChild(temp);
   alert(msg);
+}
+
+function formatDate(value) {
+  if (!value) return '';
+  const [year, month, day] = value.split('-');
+  return `${day}/${month}/${year}`;
 }
 </script>
 
