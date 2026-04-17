@@ -144,14 +144,17 @@
       <label>תעודת זהות</label>
       <input id="id">
 
-      <label>מס' רכב</label>
-      <input id="vehicle">
-
       <label>טלפון</label>
       <input id="phone">
 
       <label>אימייל</label>
       <input id="email">
+      
+      <label>מס' רכב</label>
+      <input id="vehicle">
+
+      <label>מקום האירוע</label>
+      <input id="place">
 
       <label>תאריך האירוע</label>
       <input id="eventDate"  type="date">
@@ -198,6 +201,7 @@ function generateEmail() {
   const vehicle = document.getElementById("vehicle").value;
   const phone = document.getElementById("phone").value;
   const email = document.getElementById("email").value;
+  const place = document.getElementById("place").value;
   const eventDate = formatDate(document.getElementById('eventDate').value);
   const requestDate = formatDate(document.getElementById('requestDate').value);
 
@@ -209,9 +213,10 @@ function generateEmail() {
 
 שם: ${name}
 ת.ז: ${id}
-מס' רכב: ${vehicle}
 מס' טלפון: ${phone}
 אימייל: ${email}
+מס' רכב: ${vehicle}
+מקום האירוע: ${place}
 תאריך האירוע: ${eventDate}
 תאריך הפנייה: ${requestDate}
 
